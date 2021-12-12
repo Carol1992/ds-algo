@@ -1,7 +1,7 @@
 /**
  * traversal: preorder, inorder, postorder
  * insert, delete,
- * BST, AVL-TREE, B-TREE, RED-BLACK-TREE, 2-3-TREE,
+ * BST, AVL-TREE, 2-3-TREE, RED-BLACK-TREE, B-TREE
  * node: {
  *  key,
  *  left subtree,
@@ -27,6 +27,7 @@
  * 4. Trees with two children or less are called: Binary Tree
  * 5. Binary Search Tree: left < parent < right
  */
+
 class Node {
   constructor(key) {
     this.key = key;

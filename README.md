@@ -1,7 +1,7 @@
 # ds-algo
 
 #### data structures: 
-linear data structures: arrays, stacks, queues, priority queues, linklist,  
+linear data structures: arrays, stacks, queues, linklist,  
 nonlinear data structures: tree, trie, heaps, graph, hashtable  
 
 #### algorithms: (排序、查找、遍历、最短路、最小生成树、图像分割-泛洪算法、动态规划算法)
