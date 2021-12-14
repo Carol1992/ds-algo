@@ -110,14 +110,14 @@ function test() {
     }
   });
 
-  inorder_print(root);
-  console.log("=======");
-  preorder_print(root);
-  console.log("=======");
-  postorder_print(root);
-  console.log("=======");
-  root = deleteNode(root, 1);
-  root = deleteNode(root, 44);
+  // inorder_print(root);
+  // console.log("=======");
+  // preorder_print(root);
+  // console.log("=======");
+  // postorder_print(root);
+  // console.log("=======");
+  // root = deleteNode(root, 1);
+  // root = deleteNode(root, 44);
   preorder_print(root);
 }
 
