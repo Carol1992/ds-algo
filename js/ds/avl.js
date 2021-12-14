@@ -4,7 +4,18 @@
  * single element operations: searching, traversal, insert, delete, rebalancing
  * set operations: union, intersection and set difference; helper operations: Split and Join
  * retracing: after insertion or deletion, check each of the node's ancestors for consistency with the variants of avl tree.
- */
+ * tree rotations: move the keys only "vertically", so that the in-order sequence of the keys is fully preserved
+ * there are 4 possible variants of the vialation: (node Z, balance factor BF, parent X)
+ * right right: Z is the right child of X and BF(Z) >= 0
+ * left left: Z is the left child of X and BF(Z) < 0
+ * left right: Z is the left child of X and BF(Z) > 0
+ * right left: Z is the right child of X and BF(Z) < 0
+ * with different vialation, we can perform different rotations:
+ * right right: simple rotation rotate_Left
+ * left left: simple rotation rotate_Right
+ * left right: double rotation rotate_RightLeft
+ * right left: double rotation rotate_LeftRight
+ * */
 let root = null;
 class Node {
   constructor(key) {
@@ -30,7 +41,6 @@ function insert(node, key) {
       node.rightH++;
     }
     if(node.bf() > 1 || node.bf() < -1) {
-      console.log(node.bf());
       rebalancing(node);
     }
     return node;
@@ -39,14 +49,24 @@ function insert(node, key) {
 function deletes(node, key) {
   if(!node) return node;
   if(key === node.key) {
-    if(node.left === null) return node.right;
-    if(node.right === null) return node.left;
+    if(node.left === null) {
+      node.rightH--;
+      return node.right;
+    }
+    if(node.right === null) {
+      node.leftH--;
+      return node.left;
+    }
     node.key = getMin(node.right);
     node.right = delete(node.right, node.key);
+    node.rightH--;
   } else if(key < node.key) {
     node.left = delete(node.left, key);
   } else {
     node.right = delete(node.right, key);
+  }
+  if(node.bf() > 1 || node.bf() < -1) {
+    rebalancing(node);
   }
   return node;
 }
