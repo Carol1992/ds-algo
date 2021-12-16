@@ -99,7 +99,7 @@ function postorder_print(tree) {
 
 function test() {
   let root;
-  const list = [1, 44, 55, 3, 22, 67, 12, 7, 8, 9, 1234];
+  const list = [5, 7, 14, 1, 3, 6, 43, 8, 10];
 
   // list.sort((a, b) => a - b);
   list.forEach((l) => {

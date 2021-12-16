@@ -38,11 +38,23 @@ class Node {
     this.key = key;
     this.parent = parent;
     this.left = this.right = null;
-    this.leftH = this.rightH = 0;
+    this.height = 1;
   }
   bf() {
-    return this.rightH - this.leftH;
+    if (this.left && this.right) {
+      return this.right.height - this.left.height;
+    } else if (this.left) {
+      return -this.left.height;
+    } else if (this.right) {
+      return this.right.height;
+    } else {
+      return 0;
+    }
   }
+}
+function getH(node) {
+  if (!node) return 0;
+  return node.height;
 }
 function insert(node, key, parent) {
   if (!node) {
@@ -51,11 +63,12 @@ function insert(node, key, parent) {
   } else {
     if (key < node.key) {
       node.left = insert(node.left, key, node);
-      node.leftH++;
     } else if (key > node.key) {
       node.right = insert(node.right, key, node);
-      node.rightH++;
+    } else {
+      return node;
     }
+    node.height = Math.max(getH(node.left), getH(node.right)) + 1;
     if (node.bf() > 1 || node.bf() < -1) {
       node = rebalancing(node);
     }
@@ -65,22 +78,20 @@ function insert(node, key, parent) {
 function deletes(node, key) {
   if(!node) return node;
   if(key === node.key) {
-    if(node.left === null) {
-      node.rightH--;
+    if (node.left === null) {
       return node.right;
     }
-    if(node.right === null) {
-      node.leftH--;
+    if (node.right === null) {
       return node.left;
     }
     node.key = getMin(node.right);
-    node.right = delete(node.right, node.key);
-    node.rightH--;
+    node.right = delete (node.right, node.key);
   } else if(key < node.key) {
     node.left = delete(node.left, key);
   } else {
     node.right = delete(node.right, key);
   }
+  node.height = Math.max(getH(node.left), getH(node.right)) + 1;
   if(node.bf() > 1 || node.bf() < -1) {
     node = rebalancing(node);
   }
@@ -100,7 +111,7 @@ function rebalancing(node) {
     let subtree = node.left;
     if (subtree.bf() < 0) {
       w = rotateRight(node);
-    } else {
+    } else if (subtree.bf() > 0) {
       /**
        * We first perform the left rotation on the left subtree of node.
        */
@@ -113,36 +124,40 @@ function rebalancing(node) {
     if (subtree.bf() < 0) {
       w.right = rotateRight(subtree);
       w = rotateLeft(w);
-    } else {
+    } else if (subtree.bf() > 0) {
       w = rotateLeft(node);
     }
   }
   return w;
 }
 function rotateLeft(node) {
+  if (!node) return node;
   let w = node.right;
+  if (!w) return node;
   w.parent = node.parent;
   node.parent = w;
   node.right = w.left;
   if (w.left !== null) w.left.parent = node;
   w.left = node;
-  node.leftH++;
-  node.rightH--;
+  node.height = Math.max(getH(node.left), getH(node.right)) + 1;
+  w.height = Math.max(getH(w.left), getH(w.right)) + 1;
   return w;
 }
 function rotateRight(node) {
+  if (!node) return node;
   let w = node.left;
+  if (!w) return node;
   w.parent = node.parent;
   node.parent = w;
   node.left = w.right;
   if (w.right !== null) w.right.parent = node;
   w.right = node;
-  node.leftH--;
-  node.rightH++;
+  node.height = Math.max(getH(node.left), getH(node.right)) + 1;
+  w.height = Math.max(getH(w.left), getH(w.right)) + 1;
   return w;
 }
 function test() {
-  const list = [19, 44, 55, 3, 22, 67, 12, 7, 8, 9, 1234];
+  const list = [5, 7, 14, 1, 3, 6, 43, 8, 10];
   list.forEach((l) => (root = insert(root, l, root)));
 }
 function preorder_print(tree) {
