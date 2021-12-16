@@ -3,6 +3,7 @@
  * every internal node is a 2-node or a 3-node
  * all leaves are at the same level
  * all data are kept in sorted order
+ * it's a B tree
  * 
  * we say that T is a 2-3 tree if and only if one of the following statement holds:
  * 1. T is empty
@@ -18,3 +19,43 @@
  * 
  * 2-3-4 tree: every internal node is a 2-node, 3-node or 4-node
  */
+class Node {
+  constructor(keys, children) {
+    this.keys = keys;
+    this.children = children;
+    this.height = 1;
+  }
+}
+function isVilid(node) {
+  if (node === null) return true;
+  if (node.keys.length === 1 && node.children.length === 2) {
+    let a = node.keys[0];
+    let p = node.children[0];
+    let q = node.children[1];
+    if (a > p && a < q && p.height === q.height) {
+      return isVilid(p) && isVilid(q);
+    } else {
+      return false;
+    }
+  } else if (node.keys.length === 2 && node.children.length === 3) {
+    let a = node.keys[0];
+    let b = node.keys[1];
+    let p = node.children[0];
+    let q = node.children[1];
+    let r = node.children[2];
+    if (
+      a > p &&
+      a < q &&
+      b > q &&
+      b < r &&
+      p.height === q.height &&
+      q.height === r.height
+    ) {
+      return isVilid(p) && isVilid(q) && isVilid(r);
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
