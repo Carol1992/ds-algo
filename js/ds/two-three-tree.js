@@ -13,5 +13,8 @@
  *  3.1 p < a < q < b < r
  *  3.2 p, q, r are 2-3 trees of the same height
  * 
- * operations: insert, search
+ * operations: insert, search, delete
+ * insert and delete will cause node expansion, split, merge
+ * 
+ * 2-3-4 tree: every internal node is a 2-node, 3-node or 4-node
  */
