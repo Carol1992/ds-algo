@@ -1,0 +1,424 @@
+Moore's Law: IC resources double every 2 years
+
+the five classic components of a computer are input, output, memory, datapath, and control
+the interface between the hardware and software: ISA
+transistor: an on/off switch controlled by electricity
+Time = instructions/program * clock cycles/instruction * seconds/clock cycle
+CMOS: 互补金属氧化物半导体
+阿姆达尔 Amdahl's Law: the performance enhancement possible with a given 
+improvement is limited by the amount that the improved feature is used.
+
+performance + energy/cost
+CPI, IPC, clock rate, 
+
+alignment restriction: words must start at address that are multiple of 4
+the mips address is specified in part by a constant and in part by the contents
+of a register
+
+overflow: if the number that is the proper result of such operations can not be 
+represented by these rightmost hardware bits
+
+two's complement: leading 0s mean positive, and leading 1s mean negative
+二进制补码
+
+1111 1111 1111 1111 1111 1111 1111 1111
+-1 if it is an integer
+4294967295 if it is an unsigned integer
+
+$a0-$a3: store parameters
+$v0-$v1: store return values
+$ra: return address to the origin
+
+The jal instruction saves PC+4 in register $ra to link to the following 
+instruction to set up the procedure return
+
+spill registers to memory: use a stack $sp
+register used to access to static data: global pointer $gp
+
+124: compiling a recursive C procedure into MIPS assembly code
+131: compiling a string copy procedure
+
+C code => assembly code => machine code
+stack: 从上往下, 
+heap: 从下往上,
+memory: instructions, variables, 
+register: 32 32 bits
+leaf procedure + nested procedure 
+
+once a function call runs to completion, any data on the stack created 
+specifically for that function call will automatically be deleted. any data on the 
+heap will remain there untill it's manually deleted by the programmer.
+
+the stack is set to a fixed size, and can not grow past it's fixed size.
+stack overflow
+the heap could have the problem of fragmentation, which occurs when the available 
+memory on the heap is being stored as noncontiguous.
+
+when translating from c to assembly language by hand, we follow the rules:
+1. allocate registers to program variables
+2. produce code for the body of the procudure
+3. preserve registers across the procedure invocation
+
+
+MIPS has more registers and ARM has more addressing modes
+CISC: a single instruction can do multiple things, x86 (performance > power)
+RISC:  (ARM/MIPS)
+	
+
+assembly language plays two roles:
+1. the output language of compilers
+2. as a language in which to write programs
+
+when you should use assembly language: program's size and speeds are critical
+
+Object File:
+1. header: describes the size and position of the other pieces of the file
+2. text segment: contains machine language code for routines
+3. data segment: contains a binary representation of the data
+4. relocation information: identifies instructions and data words that depend on absolute addresses
+5. symbol table: associates addresses with external labels
+6. debugging information
+
+procedure call frame: a block of memory that is used to hold values passed to a 
+procedure as arguments, to save registers that a procedure may modify but that 
+the procedure's caller doesn't want changed, and to provide space for local variables.
+
+Byte addressable memory refers to architectures where data can be accessed and 
+addressed in units that are narrower than the bus.
+
+logic blocks: 
+1. combinational logic (the output only depends on input)
+2. sequential logic(including state)
+
+gate: a device that implements basic logic functions, such as AND or OR
+any logical function can be constructed using AND gates, OR gates, and inversion.
+NOR gate: an inverted OR gate
+NAND gate: an inverted AND gate
+
+rather than draw inverters explicitly, a common practice is to add "bubbles" to 
+the inputs or outputs of a gate to cause the logic value on that input line or output 
+line to be inverted.
+
+decoder: has an n-bit input and 2 的n次方 outputs
+
+multiplexors(selector) basically consists of three parts:
+1. a decoder that generates n signals, each indicating a different input value
+2. an array of n AND gates, each combining one of the inputs with a signal from the 
+decoder
+3. a single large OR gate that incorporates all the outputs of the AND gates
+
+sum of products: a form of logical representation that employs a logical sum of products
+
+programmable logic array(PLA): inputs => (AND gates + OR gates) => outputs
+
+clocking methodology: the approach used to determine when data is valid and 
+stable relative to the clock
+edge-triggered clocking: a clocking scheme in which all state changes occur on a clock
+edge
+the processor's 32 GPR are stored in a structure called a register file
+the register file contains all the registers and has two read ports and one write port
+
+branch taken: a branch where the branch condition is satisfied and the PC becomes 
+the branch target
+datapath for the core MIPS architecture, can excute the basic instructions in a single 
+clock cycle
+single-cycle datapath vs pipelining
+
+1-bit ALU =>32-bit ALU (ADD, SUB, AND, OR, NOR, NAND)
+computer bus, datapath, 
+
+32 32-bit registers, byte addressable memory => increase 4 bytes each time
+we can use transistors to create logic gates
+
+memory hierarchy: a structure that uses multiple levels of memories
+
+clock cycle: it's a single increment of the CPU clock during which the smallest unit of 
+processor activity is carried out.
+a CPU which completes 3 billion clock cycles per second has a clock speed of 3GHz
+
+《the art of electronics》
+Alan Turing laid the theoretical groundwork for fully programmable computers in 1936.
+Turing test, Turing complete
+
+there is a pathway between the cpu and the memory called the system bus, it carries 
+3 things: memory address, data value, control signals
+
+Linux kernel has full control over the computer's hardware.
+a core is a seperate and almost entirely independent engine that executes machine instructions
+
+memory cells are arranged in a matrix, and they are selected using s system of x,y addressing.
+additional circuitry is needed to convert a binary memory address to a pair of x,y values 
+that select one cell from the many. the job of this circuitry is called memory addressing.
+
+a decoder is a logic element that accepts a binary number as an input value and use it to 
+select one, and only one, of several output lines.
+high clock rates for anything increate power usage and waste heat.
+
+Superscalar execution is difficult to implement but easy to describe: multiple instructions are
+issued at the same time, and they execute in parallel. 
+
+a vector of four values is loaded from memory into registers. A SIMD instruction performs an operation on
+all four values in the vector simultaneously. Then the entire vector is written back to memory. 
+
+Taken as a group, a CPU’s registers are called its register file or register set.
+
+the ISA defines the behaviour of a CPU, and the microarchitecture defines its structure
+
+in the ARM universe, a "core" is more specifically a CPU that may be incorporated into a custom 
+device that includes non-CPU logic. such a device is called SoC
+
+one of the fundamental decisions behind RISC CPU design is to put as many registers as is 
+practical within the CPU
+
+interrupt types: reguar and fast (IRQ, FIQ)
+
+A handler for an interrupt or exception of a given priority may be interrupted by one of the 
+higher priority
+
+a coprocessor is a separate, specialised execution unit that usually has an instruction set of its own,
+distinct from that of the CPU
+
+the ARM family of CPUs supports several different types of closely coupled coprocessors, 
+including floating point, SIMD, and system control and cache maintenance
+
+overflow: a value is too large to express in 80 bits
+underflow: a value is too small to express in 80 bits
+
+CPU states: Thumb state, Jazelle state, ARM state
+Processor Modes
+
+AMBA: Advanced Microcontroller Bus Architecture
+
+
+Virtualization: process, memory, 
+Concurrency: thread, lock
+Persistence: I/O devices, hard disk drives, RAIDs, Files and Directories, File System, Locality, SSDs
+Distributed Systems
+
+the OS is virtualizing memory, each process accesses its own private virtual address space, 
+which the OS somehow maps onto the physical memory of the machine.
+
+these system calls are routed to the part of the os called the file system, which are then handles
+ the requests and return some kind of error code to the user.
+
+CPU的位是指一次性可处理的数据量是多少， 32位 vs 64位
+
+the abstraction provided by the os of a running program is something we will call a process.
+
+components of machine state: memory, register, persistent storage
+
+process api: create, destroy, wait, status, miscellaneous control
+
+load the code and data into memory;
+allocate memory for stack and heap;
+i/o setup;
+os transfers control of the CPU to the newly-created process;
+
+process states: running, ready, blocked
+
+the process is a running program
+
+the OS "baby proofs" the CPU, by first setting up the trap handlers and starting an interrupt timer,
+and then by only running processes in s restricted mode.
+
+RR is sometimes called time-slicing. Note that
+the length of a time slice must be a multiple of the timer-interrupt period;
+thus if the timer interrupts every 10 milliseconds, the time slice could be
+10, 20, or any other multiple of 10 ms.
+
+The shorter it is, the better the performance of RR under the response-time metric.
+suddenly the cost of context switching will dominate overall performance
+
+how can we design a scheduler that both minimizes response time for interactive jobs while 
+also minimizing turnaround time without a priori knowledge of job length
+
+batch-like process
+
+The Solaris MLFQ implementation — the Time-Sharing scheduling
+class, or TS — is particularly easy to configure;
+
+FreeBSD scheduler
+
+MLFQ rules:
+rule 1: if priority a > priority b, a runs
+rule 2: if priority a = priority b, a and b run in round-robin fasion using the time slice 
+of the given queue
+rule 3: when a job enters the system, it's placed at the highest priority
+rule 4: once a job uses up its time allotment at a given level, its priority is reduced.
+rule 5: after some time period S, move all the jobs in the system to the topmost queue
+
+Lottery scheduling:
+ticket mechanisms
+
+the linux completely fair scheduler(CFS):
+time slice = Math.max(48ms / processes nums, 6ms)
+virtual runtime = time slice * process been executed
+
+multi-threaded applications can spread work across multiple CPUs and thus run 
+faster when given more CPU resources
+
+segmentation fault arises from a memory access on a segmented machine to an illegal address
+
+page table: stores virtual-to-physical address translations, thus letting the system know where 
+each page of an address space actually resides in physical memory.
+
+temporal locality and spatial locality 时间局部性和空间局部性
+
+specifically, the TLB contains virtual-to-physical translations that are only valid for the currently 
+running process; as a result, when switching from one process to another, the hardware or os must be 
+careful to ensure that the about-to-run process does not accidentally use translations from some 
+previously run process.
+
+the mips r4000 supports a 32bit address space with 4KB pages. we would expect a 20bit VPN 
+and 12bit offset in our virtual address. the VPN translates to up to a 24bit physical frame 
+number(PFN), and hence can support systems with up to 64GB of main memory
+
+Assume again a 32-bit address space (2^32 bytes), with 4KB (2^12 byte)
+pages and a 4-byte page-table entry. An address space thus has roughly
+one million virtual pages in it (2^32 / 2^12 ); multiply by the page-table entry size
+and you see that our page table is 4MB in size. 
+
+assume we have a 30-bit virtual
+address space, and a small (512 byte) page. Thus our virtual address has
+a 21-bit virtual page number component and a 9-bit offset.
+
+objdump: disassembler
+gdb: debugger
+valgrind/purify: memory profilers
+
+
+calculate the parity: for a given set of bits, the XOR of all those bits returns a 0 if there are an even(偶数) number 
+of 1's in the bits, and a 1 if there are an odd number of 1's.
+reconstruct the bit: XOR the data bits and the parity bits together
+ 
+a file is simply a linear array of bytes, each of which you can read or write.
+
+strace/dtruss: trace every system call made by a program while it runs.
+
+free space management: free-list, bitmaps, B-tree
+
+bitmap (data, inode), inode, data
+
+the rule of "write the pointed-to object before the object that points to it" is at the core of 
+crash consistency.
+
+size of physical address, size of virtual address, page size, VPN, PFN, valid bit, offset bits
+
+va => vpn + offset
+vpn => look in the page table to see if it's valid => if valid, get PFN
+physical page + offset = physical address
+
+
+multi-level page table
+PDE: page directory entry (some bits of a va), points to a page of the page table
+PTE: page table entries, holds the PFN of va
+PDBR: page directory base register
+
+valid | PT6 ... PT0
+
+valid | PFN6 ... PFN0
+
+bandwidth: give you a sense of how fast the system you're using can move through data
+page-replacement policy: FIFO, LRU, LFU, OPT, 
+                                    UNOPT, RAND, CLOCK
+TLB hit, TLB miss
+mmu
+
+segmentation fault, page fault
+
+页内碎片 vs 页表长度
+
+gcc -g -o a.out test.c
+gdb a
+break main
+run
+display (var)
+n/s
+quit
+
+tools: GNU make, gdb, valgrind, callgrind, vim (工程化、debugger、内存、性能、编辑)
+
+segmentation fault, stackoverflow, null pointer, memory not freed, file not close
+
+sizeof, CHAR_BIT
+int8_t, int16_t, int32_t, int64_t
+uint8_t, uint16_t, uint32_t, uint64_t
+
+INT_MIN, INT_MAX inttypes.h
+
+sizeof typedef
+
+size_t: uint32_t
+ptrdiff: int32_t
+
+Most of the time when you are tempted to test floats for equality, you are better off testing if one lies within 
+a small distance from the other, e.g. by testing fabs(x-y) <= fabs(EPSILON * y), where EPSILON is usually 
+some application-dependent tolerance. 
+
+errno: EPERM, ENOENT, EACCES
+char * strerror(int errno)
+void perror(char *message)
+char *program_invocation_name === argv[0]
+char *program_invocation_short_name: same as program_invocation_name minus everything up to the last slash
+text/data/stack
+static allocation: allocated once and never freed
+automatic allocation: freed when exit from functions
+dynamic memory allocation: manually allocate and free by programmers
+
+you can store the result of malloc into any pointer varibale without a cast;
+You should check the value of every call to malloc and realloc
+void *realloc(void *ptr, size_t newsize)
+void *calloc(size_t count, size_t eltsize): allocates memory and clears it to zero
+__malloc_hook, __realloc_hook, __free_hook:
+the value of this variable is a pointer to the function that malloc/realloc/free uses whenever it is called
+
+struct mallinfo mallinfo(void): get infomation about dynamic memory allocation by calling this function
+mtrace/muntrace:When the mtrace function is called it looks for an environment variable named MALLOC_TRACE. 
+This variable is supposed to contain a valid file name.
+the best thing one can do is to call mtrace as the very first function in the program and never call muntrace. 
+the first principle of programming is that you should never write the same code twice.
+
+diff:
+1. using namespace std
+2. the names of standard C libraties are written beginning with a c
+3. the .h is not used anymore
+4. input from use and output to screen can be performed through: cout<< and cin>>, end line is endl
+5. variables can be encapsulated between {} blocks, totally seperated from other variables
+6. decare a variable to be local to a loop
+7. global variable and local varable can have the same name, and global varible be accessed by using ::varibalename
+8. reference or shallow copy is possible: &b
+9. Namespaces can be declared. The variables declared within a namespace can be used thanks to the :: operator:
+10. function declared as inline function
+11.try throw catch
+12. define default parameters for functions
+13.function overload
+14.operator overload
+15.using template to define generic type
+16.The keywords new and delete can be used to allocate and deallocate memory. 
+17. a struct definition can also contains functions
+18 class: a struct that keeps its data hidden
+19 constructor: same name as class, it's best to declare only one constructor and give it default parameters.
+20 deconstructor: ~constructor-name, free memory in this place
+21 create multiple instances, modify them,
+22 keyword "this" in class: the address of the instance
+23. it's possible to declare arrays of objects
+24 define function prototype in class, and implementation outside using: class::func_name(){}
+25 variables declared as static in class are shared by all instances of the class, it must be initialised outside the class declaration
+26 static variables in class are accessed by using: class::static-variable
+27 you can define constant variables and initialize inside the class
+28. format output: cout.width(7); cout << setw(3)<<i<<setw(5)<<i*i<<endl;
+29. file io: fstream
+
+
+algorithms, software development process, data vis, ML
+database, computer architecture, computer network, AI
+OS, computing/testing/security/design
+
+
+
+
+
+
+
+
+

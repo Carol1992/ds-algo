@@ -1,0 +1,220 @@
+# start ssh
+sudo /etc/init.d/ssh start
+
+# install screen
+sudo apt-get update
+sudo apt-get install screen
+ctrl+a => c create
+ctrl+a => k kill
+ctrl+a => #num navigate to #num
+ctrl+a => shift+a rename
+ctrl+a => d detach from a screen session
+screen -x re-attach
+screen -x 1234
+https://www.gnu.org/software/screen/manual/screen.html
+
+# generate rsa keys
+ssh-keygen -t rsa -b 4096 -C "username"
+ssh-add ~/.ssh/id_rsa
+sudo scp file-location user@ip:copy-location
+
+# re-start network
+sudo nano /etc/network/interfaces
+sudo /etc/init.d/networking stop
+sudo /etc/init.d/networking start
+
+# check status
+cat /proc/cpuinfo
+cat /proc/meminfo
+cat /proc/partitions
+vcgencmd measure_temp
+vcgencmd measure_volts core/sdram_c/sdram_i/sdram_p
+
+# overclocking 超频
+sudo raspi-config => overclock 
+sudo nano /boot/config.txt => #arm_freq=800
+
+#manual
+man as/vim/apt-get/make
+
+#Makefile
+second: second_assem_prog
+second_assem_prog: second_assem_prog.o
+gcc –o $@ $+
+second_assem_prog.o: second_assem_prog.s
+as –o $@ $<
+third: third_assem_prog
+third_assem_prog: third_assem_prog.o
+gcc -o $@ $+
+third_assem_prog.o: third_assem_prog.s
+as -o $@ $<
+
+#make
+make third
+
+#echo
+echo $?
+
+#threads
+ps 
+Just as the operating system can have multiple programs running and a program can have
+multiple processes, a process can have multiple threads.
+User level threads
+Kernel level threads
+Hybrid threads
+
+#list
+lsusb
+lsdev
+lsblk
+lspci
+df -h 
+ls /dev/sd*
+
+外接硬盘+从硬盘启动pi
+设置NAS(network-attached system)
+sensors
+integrating with arduino
+screen display
+01.26-02.27 7-8 20-24
+03.01-06.01 GT microMaster 16 weeks/2 courses
+
+professor's opinion, tone(excited, upset, hopefull)
+why mention a? => use as an example to illustrate the concept
+note the difference if mention multiple things in the same category
+the main idea
+notice some transition words
+
+
+
+No one can deny that there are both positive and negative aspects of... If I were forced to choose, I would 
+definitely ... It is my firm belief that ... for a number of reasons, and I will develop these ideas in the subsequent
+paragraphs.
+To begin with, ... I have to admit that my opinion on this matter has been profoundly influenced by my own personal 
+experience. You see, ... As a result, ... For this reason, ...
+Secondly, ... Drawing from my own experience, ... Moreover, ...It's certainly clear to see why ...
+In light of the above mentioned reasons, I strongly believe that ...
+
+
+Recently, there has been a ton of debates as to .... More specifically, in regards to the passages, 
+the writer puts forth the idea that .... In the listening passage, the lecturer is quick to point out there are 
+some serious flaws in the writer's claims. In fact, the professor believes that ..., and addresses, 
+in detail, the trouble with each point made in the reading text.
+First and foremost, the author of the reading states that ... Some professionals in the same field, 
+however, stand in firm opposition to this claim. in the listening, for example, the professor states that .... 
+He goes on to say that ....
+One group of scholars, represented by the writer, think that .... Of course, though, not all experts in this 
+field believe this is accurate. Again, the speaker speciffically addresses this point when he states evidences 
+show that ....
+Finally, the author wraps his argument by positing that .... Not supprisingly, the lecturer takes issue with 
+this claim by contending that ....
+To sum up, both the writer and the professor hold conflicting views about .... It's clear that they will have 
+trouble finding common ground on this issue.
+
+
+Personally speaking, I think ... I remember when... On top of that ... For example... So, to sum up, ...
+
+The reading passage proposes a change to campus policy, In particular, ....
+The speaker in the conversation is in favor of/against this idea. To start, he/she says that...
+Secondly, he/she explains that ...
+As you can see, the speaker in the listening clearly agrees/disgrees with this plan.
+
+According to the reading, (topic definition)
+In the lecture, the professor delves deeper into this subject by proving an example / two examples of (topic).
+To start, the lecture explains that (first example)
+He/She goes on to say that (second example)
+So, after listening, I now have a better understanding of what (topic) is.
+
+The professor goes into a ton of detail about (topic), which (detail/definition)
+After introducing the topic, the lecturer mentions that (example 1)
+He/She goes on to say that (example 2)
+So, after hearing this lecture, I now have a better understanding of (topic)
+
+
+to start 
+a piece of cake / a no brainer
+To make a long story short
+not a big deal 
+on top of that
+believe it or not
+a big fan of 
+honestly
+actually
+probably
+weather or not students should wear school uniforms comes down to the opinion of students 
+this is a pretty controversial topic nowadays 
+it is definitely the case that 
+I've never thought about this before, but...
+I have to say that ...
+Right off the bat, the man says that he doesn't like...
+The woman is perfectly fine with ...
+The man isn't crazy about...
+It looks like there is a change on the university campus, you see...
+One interesting thing I learned from the reading is that ...
+The reading passage goes into detail about ..
+The professor provides a crystal clear example of this.
+I have never heard of (topic) until now, and it's knid of interesting.
+The professor talks about / discusses ...
+These are the main reasons why the woman ...
+Just to wrap things up, the lecturer clearly explains...
+In conclusion, the professor clearly has a firm understanding of...
+If I were asked, I will say that ...
+I definitely think that ...
+Towards the end of the talk, the professor says that ...
+I will never forget when ...
+The reading passage starts off by saying that ...
+
+introduction <12s => your opinion
+point 1 + example 1 => 24
+point 2 + example 2 => 38
+conclusion <7s
+
+introduction <15s
+details => 38
+conclusion <7s
+
+agree/disagree, preference: intro + body1 + body2 + body3 + conclusion
+advantage/disadvantage: intro + advantage + disadvantage + conclusion
+compare and contract: intro + compare/contract in one aspect + compare/contract in another aspect + conclusion
+
+The debate on the competition between ... has been going on for decades. As far as I am concerned, I agree with 
+the statement that ... because I firmly believe that ...
+
+It is generally believed that ... However, In my opinion, ...
+
+similarly, in the same way, likewise
+
+
+how much money can you save for you to purchase your master degree?
+how much will you spend in this master degree?
+what's your career goal in the future?
+why you want this degree so urgently?
+is there any way for you to make money while pursuing your degree?
+
+Personally speaking, I disagree with the statement that... First of all, ... Secondly, ... As you can see, I totally disagree with 
+the opinion that ...
+
+The woman disgrees with the announcement which is about... One reason is that... Another reason is that...
+Therefore, the womman believes that ... is a bad idea.
+
+From the reading, X is defined as...
+The professor further illustrate this subject by giving two examples / a real-world example, First of all, ...
+Secondly, ... Therefore, ...
+
+The lecture is about... The professor says that there are two ways ... Firts of all, ...
+Secondly, ... Threfore, these are the two ways that ....
+
+Recently, there has been a ton of debate as to ... According to the reading passage, the writer states that ...
+While in the listening, the speaker points out some serious flaws in the writer's statement. In fact, the speaker 
+believes that ... All the points made in the reading are effectively challenged by the speaker.
+First of all, the writer claims that... Some people may have different opinions. In the listening, for example, 
+the speaker says that ... He goes on to say that ...
+Secondly, some professionals in this field, represented by the writer, believes that ... Apparently not all people 
+agree with this statement. Again, the speaker specifically addresses this point when he says that ...
+Thirdly, the writer also states that... Not supprisingly, the speaker contends that...
+To sum up, both the writer and the speaker hold different views on ... It's clear that they will have trouble 
+finding consensus on this issue.
+
+
+
+
