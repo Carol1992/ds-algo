@@ -19,4 +19,5 @@
  * the internal nodes of a B+ tree are often called index nodes.
  * the internal nodes of B+ tree are stored in the main memory, while leaf nodes are stored in the secondary memory.
  * 
+ * applications: database, file system
  */
