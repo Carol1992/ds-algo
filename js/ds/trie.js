@@ -28,11 +28,12 @@ function insert(root, key, value) {
   node.isEndOfNode = true;
   node.value = value;
 }
-function getVal(node, key) {
-  if (node === null) return node;
+function getVal(root, key) {
+  let node = root;
   for (let char of key) {
-    if (node.children.includes(char)) {
-      node = node.children[char];
+    let idx = node.children.findIndex((n) => n.char === char);
+    if (idx !== -1) {
+      node = node.children[idx];
     } else {
       return null;
     }
@@ -51,7 +52,6 @@ function print(node, chars = []) {
 }
 
 function test() {
-  let root = new Node();
   let list = ["tree", "map", "try", "mouse", "apple"];
   let val = [3, 5, 1, 2, 6];
   list.forEach((l, i) => {
@@ -60,4 +60,10 @@ function test() {
   print(root);
 }
 
+let root = new Node();
 test();
+console.log("key: tree, value: ", getVal(root, "tree"));
+console.log("key: try, value: ", getVal(root, "try"));
+console.log("key: map, value: ", getVal(root, "map"));
+console.log("key: mouse, value: ", getVal(root, "mouse"));
+console.log("key: apply, value: ", getVal(root, "appl"));
