@@ -18,4 +18,13 @@
  * adjacency list:Vertices are stored as records or objects, and every vertex stores a list of adjacent vertices.
  * adjacency matrix: rows represent source vertices and column represent destination vertices
  * incidence matrix: rows represent the vertices and columns represent the edges
+ * 
+ * BFS, DFS
+ * graph cycle
+ * topological sorting
+ * minimum spanning tree
+ * shortest paths
+ * backtracking
+ * connectivity
+ * maximum flow
  */
