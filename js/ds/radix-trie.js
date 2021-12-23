@@ -27,19 +27,25 @@ function insert(node, str) {
   let traverseEdge = null;
   //find common prefix
   let prefix = "";
-  while (traverseNode !== null && !traverseNode.isLeaf() && prefix.length < str.length) {
+  let index = -1;
+  while (
+    traverseNode !== null &&
+    !traverseNode.isLeaf() &&
+    prefix.length < str.length
+  ) {
     let idx = -1;
-    for(let i=0; i<traverseNode.edges.length; i++) {
+    for (let i = 0; i < traverseNode.edges.length; i++) {
       let e = traverseNode.edges[i];
-      idx = commonPrefixIdx(e.label, str);
+      idx = commonPrefixIdx(e.label, str.slice(prefix.length, str.length));
       if (idx !== -1) {
         prefix += e.label.slice(0, idx + 1);
         traverseNode = e.targetNode;
         traverseEdge = e;
+        index = idx;
         break;
       }
     }
-    if(idx === -1) {
+    if (idx === -1) {
       break;
     }
   }
@@ -47,14 +53,21 @@ function insert(node, str) {
   if (prefix.length === 0) {
     let newEdge = new Edge(new Node(), str);
     node.edges.push(newEdge);
-    console.log(node);
-  } else if(prefix.length < str.length) {
+  } else if (prefix.length < str.length) {
     let plen = prefix.length;
     let remain_str = str.slice(plen, str.length);
-    let old_remain_str = traverseEdge.label.slice(plen, traverseEdge.label.length);
-    traverseNode.edges.push(new Edge(new Node(), remain_str));    
-    traverseNode.edges.push(new Edge(new Node(), old_remain_str));
-    traverseEdge.label = traverseEdge.label.slice(0, plen);
+    let old_remain_str = traverseEdge.label.slice(
+      index + 1,
+      traverseEdge.label.length
+    );
+    if (remain_str !== "") {
+      traverseNode.edges.push(new Edge(new Node(), remain_str));
+    }
+
+    if (old_remain_str !== "") {
+      traverseNode.edges.push(new Edge(new Node(), old_remain_str));
+      traverseEdge.label = traverseEdge.label.slice(0, index + 1);
+    }
   }
 }
 
@@ -106,7 +119,8 @@ function print(node, char = "") {
 let root = new Node();
 function test() {
   // let list = ["tree", "map", "try", "mouse", "apple"];
-  let list = ["test", "toaster", "toasting"]; //, "slow", "slower", "slowly"
+  let list = ["apple", "cat", "cup", "application", "concat", "cute"];
+  // let list = ["slow", "slower", "slowly", "test", "toaster", "toasting"];
   list.forEach((l) => {
     insert(root, l);
   });
@@ -114,9 +128,13 @@ function test() {
 
 test();
 // console.log(root);
-// console.log("===================================");
-// print(root);
-// console.log("===================================");
+console.log("===================================");
+print(root);
+// console.log(root);
+// console.log(root.edges[0].targetNode);
+// console.log(root.edges[1].targetNode);
+// console.log(root.edges[1].targetNode.edges[0].targetNode);
+console.log("===================================");
 // console.log("has tree: ", lookup(root, "tree"));
 // console.log("has map: ", lookup(root, "map"));
 // console.log("has try: ", lookup(root, "try"));
