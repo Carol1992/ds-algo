@@ -28,7 +28,7 @@ function insert(node, str) {
   //find common prefix
   let prefix = "";
   while (traverseNode !== null && !traverseNode.isLeaf() && prefix.length < str.length) {
-    let idx;
+    let idx = -1;
     for(let i=0; i<traverseNode.edges.length; i++) {
       let e = traverseNode.edges[i];
       idx = commonPrefixIdx(e.label, str);
@@ -43,18 +43,16 @@ function insert(node, str) {
       break;
     }
   }
+
   if (prefix.length === 0) {
     let newEdge = new Edge(new Node(), str);
     node.edges.push(newEdge);
   } else if(prefix.length < str.length) {
     let plen = prefix.length;
-
     let remain_str = str.slice(plen, str.length);
-    traverseNode.edges.push(new Edge(new Node(), remain_str));
-
     let old_remain_str = traverseEdge.label.slice(plen, traverseEdge.label.length);
+    traverseNode.edges.push(new Edge(new Node(), remain_str));    
     traverseNode.edges.push(new Edge(new Node(), old_remain_str));
-
     traverseEdge.label = traverseEdge.label.slice(0, plen);
   }
 }
@@ -95,31 +93,32 @@ function lookup(node, str) {
 
 function print(node, char = "") {
   let traverseNode = node;
-  if (traverseNode !== null && !traverseNode.isLeaf()) {
-    traverseNode.edges.forEach((e) => {
-      print(e.targetNode, char + e.label);
-    });
-  } else {
+  if (traverseNode.isLeaf()) {
     console.log(char);
   }
+  traverseNode.edges.forEach((e) => {
+    print(e.targetNode, char + e.label);
+  });
+
 }
 
 let root = new Node();
 function test() {
-  let list = ["tree", "map", "try", "mouse", "apple"];
+  // let list = ["tree", "map", "try", "mouse", "apple"];
+  let list = ["test", "toaster", "toasting"]; //, "slow", "slower", "slowly"
   list.forEach((l) => {
     insert(root, l);
   });
 }
 
 test();
-console.log(root);
-console.log("===================================");
-print(root);
-console.log("===================================");
-console.log("has tree: ", lookup(root, "tree"));
-console.log("has map: ", lookup(root, "map"));
-console.log("has try: ", lookup(root, "try"));
-console.log("has mouse: ", lookup(root, "mouse"));
-console.log("has apple: ", lookup(root, "apple"));
-console.log("has to: ", lookup(root, "to"));
+// console.log(root);
+// console.log("===================================");
+// print(root);
+// console.log("===================================");
+// console.log("has tree: ", lookup(root, "tree"));
+// console.log("has map: ", lookup(root, "map"));
+// console.log("has try: ", lookup(root, "try"));
+// console.log("has mouse: ", lookup(root, "mouse"));
+// console.log("has apple: ", lookup(root, "apple"));
+// console.log("has to: ", lookup(root, "to"));
