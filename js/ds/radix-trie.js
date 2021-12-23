@@ -47,6 +47,7 @@ function insert(node, str) {
   if (prefix.length === 0) {
     let newEdge = new Edge(new Node(), str);
     node.edges.push(newEdge);
+    console.log(node);
   } else if(prefix.length < str.length) {
     let plen = prefix.length;
     let remain_str = str.slice(plen, str.length);
