@@ -1,3 +1,4 @@
+let util = require("util");
 /**
  * starts at the root and explore as far as possile along each branch before backtracking.
  */
@@ -165,15 +166,18 @@ function print(G) {
   });
 }
 function printPaths(p) {
-  function prints(key, paths = []) {}
+  let allPaths = [];
   Object.keys(p).forEach((k) => {
+    let paths = [];
     let u = p[k];
-    if (u !== -1) {
-      prints(u, []);
-    } else {
-      console.log(k, paths);
+    paths.push(k);
+    while (u !== -1) {
+      paths.push(u);
+      u = p[u];
     }
+    allPaths.push([k, paths.reverse()]);
   });
+  return allPaths;
 }
 
 let G = new Graph();
@@ -208,7 +212,18 @@ console.log("=======");
 // bfs(G, "A");
 // console.log(visited);
 // console.log("=======");
-let {dis, parent} = dijkstra(G, "A");
+let { dis, parent } = dijkstra(G, "A");
 console.log(dis);
 console.log("=======");
 console.log(parent);
+console.log("=======");
+let allPaths = printPaths(parent);
+console.log("vertex  ", "dis  ", "path");
+console.log("------------------------------");
+allPaths.forEach((p) => {
+  console.log(
+    util.format("%s".padEnd(6), p[0]),
+    util.format("%d".padStart(5), dis[p[0]]),
+    util.format("%s".padStart(6), p[1].join(" --> "))
+  );
+});
