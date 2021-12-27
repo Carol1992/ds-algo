@@ -105,11 +105,74 @@ function bfs(G, v) {
     });
   }
 }
-function dijkstra(G) {}
+function getDisMin(obj, excludes) {
+  let minVal = Infinity;
+  let min = null;
+  Object.keys(obj).forEach((key) => {
+    if (!excludes.includes(key) && obj[key] < minVal) {
+      minVal = obj[key];
+      min = key;
+    }
+  });
+  return min;
+}
+function dijkstra(G, v) {
+  /**
+    1) Create a set sptSet (shortest path tree set) that keeps track of vertices included in the shortest-path tree, 
+       i.e., whose minimum distance from the source is calculated and finalized. Initially, this set is empty. 
+    2) Assign a distance value to all vertices in the input graph. Initialize all distance values as INFINITE. 
+       Assign distance value as 0 for the source vertex so that it is picked first. 
+    3) While sptSet doesn’t include all vertices 
+    ….a) Pick a vertex u which is not there in sptSet and has a minimum distance value. 
+    ….b) Include u to sptSet. 
+    ….c) Update distance value of all adjacent vertices of u. 
+         To update the distance values, iterate through all adjacent vertices. 
+         For every adjacent vertex v, if the sum of distance value of u (from source) and weight of edge u-v, 
+         is less than the distance value of v, then update the distance value of v. 
+    
+    printing paths:
+      The idea is to create a separate array parent[]. Value of parent[v] for a vertex v stores parent vertex of v in shortest path tree. 
+      Parent of root (or source vertex) is -1. Whenever we find shorter path through a vertex u, we make u as parent of current vertex.
+   */
+  let sptSet = [];
+  let dis = {};
+  G.vertices.forEach((i) => (dis[i.value] = Infinity));
+  dis[v] = 0;
+  let parent = {};
+  parent[v] = -1;
+  let size = G.vertices.length;
+  while (sptSet.length < size) {
+    let u = getDisMin(dis, sptSet);
+    sptSet.push(u);
+    let adj = G.neighbors(u);
+    for (let i = 0; i < adj.length; i++) {
+      let vtx = adj[i];
+      let v = vtx[0];
+      let weight = vtx[1];
+      let newDis = dis[u] + weight;
+      if (newDis < dis[v]) {
+        dis[v] = newDis;
+        parent[v] = u;
+      }
+    }
+  }
+  return { dis, parent };
+}
 function mst(G) {}
 function print(G) {
   G.vertices.forEach((v) => {
     console.log(v.value, v.adj);
+  });
+}
+function printPaths(p) {
+  function prints(key, paths = []) {}
+  Object.keys(p).forEach((k) => {
+    let u = p[k];
+    if (u !== -1) {
+      prints(u, []);
+    } else {
+      console.log(k, paths);
+    }
   });
 }
 
@@ -140,8 +203,12 @@ function test() {
 test();
 print(G);
 console.log("=======");
-dfs(G, "A");
+// dfs(G, "A");
+// console.log("=======");
+// bfs(G, "A");
+// console.log(visited);
+// console.log("=======");
+let {dis, parent} = dijkstra(G, "A");
+console.log(dis);
 console.log("=======");
-bfs(G, "A");
-console.log(visited);
-console.log("=======");
+console.log(parent);
