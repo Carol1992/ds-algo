@@ -1,4 +1,5 @@
-let util = require("util");
+const util = require("util");
+const heap = require("../ds/heaps");
 /**
  * starts at the root and explore as far as possile along each branch before backtracking.
  */
@@ -13,7 +14,7 @@ class Graph {
     this.vertices = [];
   }
   add_vertex(x) {
-    let v = this.vertices.find((i) => i.value === x);
+    let v = this.vertices.find((i) => i.value == x);
     let n_v = new Vertex(x);
     if (!v) {
       this.vertices.push(n_v);
@@ -21,59 +22,59 @@ class Graph {
     return n_v;
   }
   remove_vertex(x) {
-    this.vertices = this.vertices.filter((i) => i.value === x);
+    this.vertices = this.vertices.filter((i) => i.value == x);
   }
   add_edge(x, y, w) {
-    let v1 = this.vertices.find((i) => i.value === x);
-    let v2 = this.vertices.find((i) => i.value === y);
+    let v1 = this.vertices.find((i) => i.value == x);
+    let v2 = this.vertices.find((i) => i.value == y);
     if (v1 && v2) {
       v1.adj.push([y, w]);
       v2.adj.push([x, w]);
     }
   }
   remove_edge(x, y) {
-    let v1 = this.vertices.find((i) => i.value === x);
-    let v2 = this.vertices.find((i) => i.value === y);
+    let v1 = this.vertices.find((i) => i.value == x);
+    let v2 = this.vertices.find((i) => i.value == y);
     if (v1 && v2) {
       v1.adj = v1.adj.filter((i) => i[0] !== y);
       v2.adj = v2.adj.filter((i) => i[0] !== x);
     }
   }
   get_vertex_value(x) {
-    let v = this.vertices.find((i) => i.value === x);
+    let v = this.vertices.find((i) => i.value == x);
     if (v) {
       return v.value;
     }
     return null;
   }
   set_vertex_value(x, v) {
-    let nv = this.vertices.find((i) => i.value === x);
+    let nv = this.vertices.find((i) => i.value == x);
     nv.value = v;
   }
   get_edge_value(x, y) {
-    let v = this.vertices.find((i) => i.value === x);
-    let e = v.adj.find((i) => i[0] === y);
+    let v = this.vertices.find((i) => i.value == x);
+    let e = v.adj.find((i) => i[0] == y);
     if (e) {
       return e[1];
     }
     return Infinity;
   }
   set_edge_value(x, y, v) {
-    let vt = this.vertices.find((i) => i.value === x);
-    let e = vt.adj.find((i) => i[0] === y);
+    let vt = this.vertices.find((i) => i.value == x);
+    let e = vt.adj.find((i) => i[0] == y);
     if (e) {
       e[1] = v;
     }
   }
   //tests whether there is an edge from the vertex x to the vertex y;
   adjacent(x, y) {
-    let vt = this.vertices.find((i) => i.value === x);
-    let e = vt.adj.find((i) => i[0] === y);
+    let vt = this.vertices.find((i) => i.value == x);
+    let e = vt.adj.find((i) => i[0] == y);
     return e !== undefined;
   }
   //lists all vertices y such that there is an edge from the vertex x to the vertex y;
   neighbors(x) {
-    let vt = this.vertices.find((i) => i.value === x);
+    let vt = this.vertices.find((i) => i.value == x);
     return vt ? vt.adj : [];
   }
 }
@@ -159,7 +160,51 @@ function dijkstra(G, v) {
   }
   return { dis, parent };
 }
-function mst(G) {}
+function mst_prims(G) {
+  /**
+   1) Create a Min Heap of size V where V is the number of vertices in the given graph. 
+      Every node of min heap contains vertex number and key value of the vertex. 
+   2) Initialize Min Heap with first vertex as root (the key value assigned to first vertex is 0). 
+      The key value assigned to all other vertices is INF (infinite). 
+   3) While Min Heap is not empty, do following 
+  …..a) Extract the min value node from Min Heap. Let the extracted vertex be u. 
+  …..b) For every adjacent vertex v of u, check if v is in Min Heap (not yet included in MST). 
+        If v is in Min Heap and its key value is more than weight of u-v, then update the key value of v as weight of u-v.
+   */
+  let minHeap = new heap((a,  b) => a  -  b);
+  G.vertices.forEach((v, idx) => {
+    minHeap.insert(v.value, idx == 0 ? 0 : Infinity);
+  });
+  let firstV = minHeap.findTop();
+  let parent = {};
+  parent[firstV.value] = -1;
+  while  (!minHeap.isEmpty()) {
+    let top = minHeap.removeTop();
+    let u = top.key;
+    let adj = G.neighbors(u);
+    for (let i = 0; i < adj.length; i++) {
+      let vtx = adj[i];
+      let v = vtx[0];
+      let t = minHeap.find(v);
+      if  (t) {
+        let weight = vtx[1];
+        if (weight < t.value) {
+          t.value = weight;
+          parent[v] = u;
+        }
+      }
+    }
+  }
+  return {parent};
+}
+function mst_kruskal(G) {
+  /**
+   * 1. Sort all the edges in non-decreasing order of their weight. 
+     2. Pick the smallest edge. Check if it forms a cycle with the spanning tree formed so far. 
+        If cycle is not formed, include this edge. Else, discard it. 
+     3. Repeat step#2 until there are (V-1) edges in the spanning tree.
+   */
+}
 function print(G) {
   G.vertices.forEach((v) => {
     console.log(v.value, v.adj);
@@ -204,26 +249,51 @@ function test() {
   G.add_edge("K", "E", 121);
   G.add_edge("K", "D", 121);
 }
-test();
-print(G);
-console.log("=======");
+// test();
+// print(G);
+// console.log("=====");
 // dfs(G, "A");
-// console.log("=======");
+// console.log("=====");
 // bfs(G, "A");
 // console.log(visited);
-// console.log("=======");
-let { dis, parent } = dijkstra(G, "A");
-console.log(dis);
-console.log("=======");
+// console.log("=====");
+// let { dis, parent } = dijkstra(G, "A");
+// console.log(dis);
+// console.log("=====");
+// console.log(parent);
+// console.log("=====");
+// let allPaths = printPaths(parent);
+// console.log("vertex  ", "dis  ", "path");
+// console.log("------------------------------");
+// allPaths.forEach((p) => {
+//   console.log(
+//     util.format("%s".padEnd(6), p[0]),
+//     util.format("%d".padStart(5), dis[p[0]]),
+//     util.format("%s".padStart(6), p[1].join(" --> "))
+//   );
+// });
+function test2() {
+  new Array(9).fill(0).forEach((i, idx) => G.add_vertex(idx));
+  G.add_edge(0, 1, 4);
+  G.add_edge(0, 7, 8);
+  G.add_edge(1, 2, 8);
+  G.add_edge(1, 7, 11);
+  G.add_edge(2, 3, 7);
+  G.add_edge(2, 8, 2);
+  G.add_edge(2, 5, 4);
+  G.add_edge(3, 4, 9);
+  G.add_edge(3, 5, 14);
+  G.add_edge(4, 5, 10);
+  G.add_edge(5, 6, 2);
+  G.add_edge(6, 7, 1);
+  G.add_edge(6, 8, 6);
+  G.add_edge(7, 8, 7);
+}
+test2();
+// print(G);
+// console.log("=====");
+let { parent } = mst_prims(G);
 console.log(parent);
-console.log("=======");
-let allPaths = printPaths(parent);
-console.log("vertex  ", "dis  ", "path");
-console.log("------------------------------");
-allPaths.forEach((p) => {
-  console.log(
-    util.format("%s".padEnd(6), p[0]),
-    util.format("%d".padStart(5), dis[p[0]]),
-    util.format("%s".padStart(6), p[1].join(" --> "))
-  );
-});
+// console.log("=====");
+// console.log(parent);
+// console.log("=====");

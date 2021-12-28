@@ -11,64 +11,81 @@
  * for a binary heap, given a node at index i, its children are at index 2i+1 and 2i+2, its parent at index (i-1)/2
  * applications: heapsort, selections algorithms, graph algorithms, priority queues, k-way merge, order statistics.
  */
-class BH {
-  constructor() {
-    this.maxHeaps = [];
+class Node {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
   }
-  findMax() {
-    return this.maxHeaps[0];
+}
+class BH {
+  constructor(comparator = (a,   b) => b   -   a) {
+    /**
+     * (a,b) => a-b  //ascend min-heap
+     * (a,b) => b-a  //descend max-heap
+     */
+    this.heaps = [];
+    this.comparator = comparator;
+  }
+  find(key) {
+    return this.heaps.find(i => i.key == key);
+  }
+  findTop() {
+    return this.heaps[0];
   }
   isEmpty() {
     return this.size() === 0;
   }
   size() {
-    return this.maxHeaps.length;
+    return this.heaps.length;
   }
-  insert(key) {
-    this.maxHeaps.push(key);
+  insert(key, value) {
+    let n = new Node(key, value);
+    this.heaps.push(n);
     let index = this.size() - 1;
     let pIndex = this.getParent(index);
-    while (index > 0 && this.maxHeaps[pIndex] < this.maxHeaps[index]) {
+    while (index > 0 && this.comparator(this.heaps[index].value, this.heaps[pIndex].value) < 0) {
       //vialation
       this.swap(index, pIndex);
       index = pIndex;
       pIndex = this.getParent(index);
     }
   }
-  removeMax() {
+  removeTop() {
     if (this.isEmpty()) return null;
-    let max = this.maxHeaps[0];
-    this.maxHeaps.splice(0, 1, this.maxHeaps[this.size() - 1]);
-    this.maxHeaps.length--;
+    let top = this.heaps[0];
+    this.heaps.splice(0, 1, this.heaps[this.size() - 1]);
+    this.heaps.length--;
     let index = 0;
     while (index < this.size()) {
       let cIndex = this.getChildren(index);
       let c0 = cIndex[0];
       let c1 = cIndex[1];
-      let c_max = this.maxHeaps[c0] || 0;
-      let c_max_idx = c0;
+      let c_top_idx = c0;
       if (c1 < this.size()) {
-        if (this.maxHeaps[c1] > c_max) {
-          c_max = this.maxHeaps[c1];
-          c_max_idx = c1;
+        if (this.comparator(this.heaps[c0].value, this.heaps[c1].value) > 0) {
+          c_top_idx = c1;
         }
       }
-      this.swap(index, c_max_idx);
-      index = c_max_idx;
+      this.swap(index, c_top_idx);
+      index = c_top_idx;
     }
-    return max;
+    return top;
   }
   swap(index, pIndex) {
     if (index >= this.size() || pIndex >= this.size()) return;
-    let temp = this.maxHeaps[index];
-    this.maxHeaps[index] = this.maxHeaps[pIndex];
-    this.maxHeaps[pIndex] = temp;
+    let temp = this.heaps[index];
+    this.heaps[index] = this.heaps[pIndex];
+    this.heaps[pIndex] = temp;
   }
   heapify(list) {
-    list.forEach((l) => {
-      this.insert(l);
+    list.forEach((i, idx) => {
+      if(i.hasOwnProperty('key') && i.hasOwnProperty('value')) {
+        this.insert(i.key, i.value);
+      } else {
+        this.insert(idx, i);
+      }
     });
-    return this.maxHeaps;
+    return this.heaps;
   }
   getChildren(i) {
     return [2 * i + 1, 2 * i + 2];
@@ -78,30 +95,31 @@ class BH {
   }
 }
 
-const heap = new BH();
-const list = [2, 7, 26, 25, 19, 17, 1, 90, 3, 36];
-const maxHeaps = heap.heapify(list);
-console.log(maxHeaps);
-print(maxHeaps);
-console.log("==============");
-let max = heap.removeMax();
-console.log(max, maxHeaps);
-print(maxHeaps);
+// const heap = new BH((a,b) => a-b);
+// const list = [2, 7, 26, 25, 19, 17, 1, 90, 3, 36];
+// const heaps = heap.heapify(list);
+// console.log(heaps);
+// print(heaps);
+// console.log("==============");
+// let max = heap.removeTop();
+// console.log(max, heaps);
+// print(heaps);
 
-function print(list) {
-  const length = list.length;
-  let height = Math.ceil(Math.log2(length + 1));
-  let maxLeaves = Math.pow(2, height - 1);
-  let i = 0;
-  while (i < height) {
-    let leavesNum = Math.pow(2, i);
-    let totalBefore = leavesNum - 1;
-    let sublist = [];
-    for (let j = totalBefore; j < leavesNum + totalBefore; j++) {
-      sublist.push(list[j]);
-    }
-    const r = Math.round(length / (i + 1));
-    console.log(" ".repeat(r), sublist.join(" ".repeat(r)));
-    i++;
-  }
-}
+// function print(list) {
+//   const length = list.length;
+//   let height = Math.ceil(Math.log2(length + 1));
+//   let maxLeaves = Math.pow(2, height - 1);
+//   let i = 0;
+//   while (i < height) {
+//     let leavesNum = Math.pow(2, i);
+//     let totalBefore = leavesNum - 1;
+//     let sublist = [];
+//     for (let j = totalBefore; j < leavesNum + totalBefore; j++) {
+//       list[j] !== undefined && sublist.push(list[j].value);
+//     }
+//     const r = Math.round(length / (i + 1));
+//     console.log(" ".repeat(r), sublist.join(" ".repeat(r)));
+//     i++;
+//   }
+// }
+module.exports = BH;
