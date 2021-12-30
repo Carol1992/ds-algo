@@ -14,3 +14,12 @@
  *
  *
  */
+function test() {
+  let a = [
+    [Infinity, Infinity],
+    [Infinity, Infinity],
+  ];
+  a[0][0] = 0;
+  console.log(a);
+}
+test();
